@@ -1,4 +1,6 @@
-apply plugin: "com.android.application"
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -260,6 +262,9 @@ android {
 }
 
 dependencies {
+
+    implementation 'org.bitbucket.purevpn:purevpn-sdk-android:4.0.2'
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     //noinspection GradleDynamicVersion
