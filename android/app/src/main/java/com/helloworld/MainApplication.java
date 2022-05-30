@@ -10,10 +10,49 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
 import com.helloworld.newarchitecture.MainApplicationReactNativeHost;
+
+
+import android.graphics.Color;
+import android.os.StrictMode;
+import android.text.TextUtils;
+import android.widget.Toast;
+
+
+
+import com.atom.core.exceptions.AtomValidationException;
+import com.atom.core.models.AtomConfiguration;
+import com.atom.core.models.AtomNotification;
+import com.atom.sdk.android.AtomManager;
+import android.util.Log;
+
+import java.io.Console;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
+
+
+
+  //Atom Variables - Start 
+  private static MainApplication mInstance;
+  private AtomManager atomManager;
+
+
+  private final int NOTIFICATION_ID = com.atom.sdk.android.common.Constants.Notification.DEFAULT_ID;
+  
+  public static MainApplication getInstance() {
+    return mInstance;
+  }
+
+  public AtomManager getAtomManager() {
+    return atomManager;
+  }
+
+  public void setAtomManager(AtomManager atomManager) {
+    this.atomManager = atomManager;
+  }
+
+  //Atom Variables - End
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
@@ -52,10 +91,33 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    mInstance = this;
+
     // If you opted-in for the New Architecture, we enable the TurboModule system
     ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+
+
+     // configure the ATOM SDK
+     AtomConfiguration.Builder atomConfigurationBuilder = new AtomConfiguration.Builder("9f9ff40e2ef54956465205aee3fe4d2358134db6");
+     atomConfigurationBuilder.setVpnInterfaceName("Atom SDK Demo");
+     AtomNotification.Builder atomNotificationBuilder = new AtomNotification.Builder(NOTIFICATION_ID,"Atom SDK Demo","You are now secured with Atom",R.drawable.ic_stat_icn_connected, Color.BLUE);
+     atomConfigurationBuilder.setNotification(atomNotificationBuilder.build());
+     AtomConfiguration atomConfiguration = atomConfigurationBuilder.build();
+     try {
+         AtomManager.initialize(this, atomConfiguration, new AtomManager.InitializeCallback() {
+             @Override
+             public void onInitialized(AtomManager mAtomManager) {
+              atomManager = mAtomManager;
+             }
+         });
+     } catch (AtomValidationException e) {
+         e.printStackTrace();
+     }catch (Exception e) {
+         e.printStackTrace();
+     }
+
   }
 
   /**
