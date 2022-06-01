@@ -1,181 +1,190 @@
-import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  useColorScheme,
-  View,
-  Image,
-} from 'react-native';
-
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <View style={styles.content}>
-          <Image
-            style={styles.connectStyle}
-            source={require('./assets/images/btn_listingactive.png')}
-          />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
-const styles = StyleSheet.create({
-  connectStyle: {},
-  content: {
-    alignItems: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-    height: 600,
-  },
-});
-
-export default App;
-
-
-
-
-
-
-
-
-// import React, {useEffect, useState} from 'react';
-// import { Text, StatusBar, View, StyleSheet,
-//  Platform, TouchableOpacity, Image } from 'react-native';
+// import React from 'react';
+// import {
+//   SafeAreaView,
+//   ScrollView,
+//   StatusBar,
+//   StyleSheet,
+//   useColorScheme,
+//   View,
+//   Image,
+// } from 'react-native';
 // import { NativeModules } from 'react-native';
-//  const { VoiceChangingModule } = NativeModules;
-// // const { FileWriteModule } = NativeModules;
+//  const { AtomSdkModule } = NativeModules;
+// import {Colors} from 'react-native/Libraries/NewAppScreen';
 
+// // import 
 
 // const App = () => {
-  
-//   const audioTrackURL = 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3';
+//   const isDarkMode = useColorScheme() === 'dark';
 
-//   const changeToAlein = () => {
-//     console.log(VoiceChangingModule)
-// //      Platform.OS === 'android' && FileWriteModule.FileWriteFunc("billa")
-//     // Platform.OS === 'android' && VoiceChangingModule.changeVoiceToAlien(audioTrackURL)
+//   const backgroundStyle = {
+//     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
 //   };
 
-//   const changeToChild = () => {
-//     Platform.OS === 'android' && VoiceChangingModule.changeVoiceToChild(audioTrackURL);
-//   };
-
-//   const changeToFast = () => {
-//     Platform.OS === 'android' && VoiceChangingModule.speedUpVoice(audioTrackURL);
-//   };
-
-//   const changeToSlow = () => {
-//     Platform.OS === 'android' && VoiceChangingModule.slowDownVoice(audioTrackURL);
-//   };
+//   const onClickConnectivity = () => {
+//     // console.log("onClickConnectivity")
+//     // AtomSdkModule.
+//   }
 
 //   return (
-//     <View style={styles.container}>
-//       <StatusBar barStyle="dark-content" backgroundColor={'#e4e5ea'} />
-//       <Text style={styles.title}>Voice Changer</Text>
-//       <Text style={styles.title}> Change Voice Effects </Text>
-//       <View style={styles.iconsContainer}>
-//         <TouchableOpacity onPress={() => changeToAlein()}>
+//     <SafeAreaView>
+//       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+//       <ScrollView contentInsetAdjustmentBehavior="automatic">
+//         <View style={styles.content}>
 //           <Image
-//             source={{
-//               uri:
-//                 'https://icons.iconarchive.com/icons/google/noto-emoji-smileys/256/10101-alien-icon.png',
-//             }}
-//             resizeMode={'contain'}
-//             style={styles.icon}
+//             onPress={onClickConnectivity}
+//             style={styles.connectStyle}
+//             source={require('./assets/images/btn_listingactive.png')}
 //           />
-//           <Text>Alien</Text>
-//         </TouchableOpacity>
-//         <TouchableOpacity onPress={() => changeToChild()}>
-//           <Image
-//             source={{
-//               uri:
-//                 'https://pics.freeicons.io/uploads/icons/png/2793494581535699799-512.png',
-//             }}
-//             resizeMode={'contain'}
-//             style={styles.icon}
-//           />
-//           <Text>Child</Text>
-//         </TouchableOpacity>
-//         <TouchableOpacity onPress={() => changeToFast()}>
-//           <Image
-//             source={{
-//               uri:
-//                 'https://www.pngjoy.com/pngl/346/6457386_black-arrows-fast-forward-symbol-transparent-png-download.png',
-//             }}
-//             resizeMode={'contain'}
-//             style={styles.icon}
-//           />
-//           <Text>Fast</Text>
-//         </TouchableOpacity>
-//         <TouchableOpacity onPress={() => changeToSlow()}>
-//           <Image
-//             source={{
-//               uri:
-//                 'https://img.pngio.com/action-motion-play-slow-icon-slow-motion-png-512_512.png',
-//             }}
-//             resizeMode={'contain'}
-//             style={styles.icon}
-//           />
-//           <Text>Slow</Text>
-//         </TouchableOpacity>
-//       </View>
-//     </View>
+//         </View>
+//       </ScrollView>
+//     </SafeAreaView>
 //   );
 // };
 
 // const styles = StyleSheet.create({
-//   container: {
-//     backgroundColor: '#e4e5ea',
-//     flex: 1,
-//     paddingTop: 50,
+//   connectStyle: {},
+//   content: {
 //     alignItems: 'center',
-//   },
-//   title: {
-//     fontSize: 20,
-//     color: '#000',
-//     marginVertical: 25,
-//   },
-//   iconsContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     justifyContent: 'space-evenly',
-//     width: '100%',
-//     paddingHorizontal: 50,
-//   },
-//   warningText: {
-//     color: 'red',
-//     fontWeight: 'bold',
-//     letterSpacing: 1.5,
-//     textAlign: 'center',
-//   },
-//   spacing: {
-//     marginVertical: 10,
-//   },
-//   row: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     width: '40%',
-//   },
-//   icon: {
-//     height: 40,
-//     width: 40,
-//     marginBottom: 15,
+//     display: 'flex',
+//     justifyContent: 'center',
+//     height: 600,
 //   },
 // });
 
 // export default App;
+
+
+
+
+
+
+
+
+import React, {useEffect, useState} from 'react';
+import { Text, StatusBar, View, StyleSheet,
+ Platform, TouchableOpacity, Image } from 'react-native';
+import { NativeModules } from 'react-native';
+ const { VoiceChangingModule } = NativeModules;
+// const { FileWriteModule } = NativeModules;
+
+
+const App = () => {
+  
+  const audioTrackURL = 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3';
+
+  const changeToAlein = () => {
+    console.log(VoiceChangingModule)
+//      Platform.OS === 'android' && FileWriteModule.FileWriteFunc("billa")
+    // Platform.OS === 'android' && VoiceChangingModule.changeVoiceToAlien(audioTrackURL)
+  };
+
+  const changeToChild = () => {
+    Platform.OS === 'android' && VoiceChangingModule.changeVoiceToChild(audioTrackURL);
+  };
+
+  const changeToFast = () => {
+    Platform.OS === 'android' && VoiceChangingModule.speedUpVoice(audioTrackURL);
+  };
+
+  const changeToSlow = () => {
+    Platform.OS === 'android' && VoiceChangingModule.slowDownVoice(audioTrackURL);
+  };
+
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor={'#e4e5ea'} />
+      <Text style={styles.title}>Voice Changer</Text>
+      <Text style={styles.title}> Change Voice Effects </Text>
+      <View style={styles.iconsContainer}>
+        <TouchableOpacity onPress={() => changeToAlein()}>
+          <Image
+            source={{
+              uri:
+                'https://icons.iconarchive.com/icons/google/noto-emoji-smileys/256/10101-alien-icon.png',
+            }}
+            resizeMode={'contain'}
+            style={styles.icon}
+          />
+          <Text>Alien</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => changeToChild()}>
+          <Image
+            source={{
+              uri:
+                'https://pics.freeicons.io/uploads/icons/png/2793494581535699799-512.png',
+            }}
+            resizeMode={'contain'}
+            style={styles.icon}
+          />
+          <Text>Child</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => changeToFast()}>
+          <Image
+            source={{
+              uri:
+                'https://www.pngjoy.com/pngl/346/6457386_black-arrows-fast-forward-symbol-transparent-png-download.png',
+            }}
+            resizeMode={'contain'}
+            style={styles.icon}
+          />
+          <Text>Fast</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => changeToSlow()}>
+          <Image
+            source={{
+              uri:
+                'https://img.pngio.com/action-motion-play-slow-icon-slow-motion-png-512_512.png',
+            }}
+            resizeMode={'contain'}
+            style={styles.icon}
+          />
+          <Text>Slow</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#e4e5ea',
+    flex: 1,
+    paddingTop: 50,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 20,
+    color: '#000',
+    marginVertical: 25,
+  },
+  iconsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: '100%',
+    paddingHorizontal: 50,
+  },
+  warningText: {
+    color: 'red',
+    fontWeight: 'bold',
+    letterSpacing: 1.5,
+    textAlign: 'center',
+  },
+  spacing: {
+    marginVertical: 10,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '40%',
+  },
+  icon: {
+    height: 40,
+    width: 40,
+    marginBottom: 15,
+  },
+});
+
+export default App;
