@@ -81,7 +81,7 @@ public class MainApplication extends Application implements ReactApplication {
                     @SuppressWarnings("UnnecessaryLocalVariable")
                     List<ReactPackage> packages = new PackageList(this).getPackages();
                     // Packages that cannot be autolinked yet can be added manually here, for example:
-                    // packages.add(new MyReactNativePackage());
+                     packages.add(new AtomSdkModulePackage());
                     return packages;
                 }
 
@@ -120,6 +120,7 @@ public class MainApplication extends Application implements ReactApplication {
         AtomNotification.Builder atomNotificationBuilder = new AtomNotification.Builder(NOTIFICATION_ID, "Atom SDK Demo", "You are now secured with Atom", R.drawable.ic_stat_icn_connected, Color.BLUE);
         atomConfigurationBuilder.setNotification(atomNotificationBuilder.build());
         AtomConfiguration atomConfiguration = atomConfigurationBuilder.build();
+
         try {
             AtomManager.initialize(this, atomConfiguration, new AtomManager.InitializeCallback() {
                 @Override

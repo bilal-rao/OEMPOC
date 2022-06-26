@@ -1,189 +1,205 @@
-// import React from 'react';
+// import React, {useEffect, useState} from 'react';
+// import LottieView from 'lottie-react-native';
 // import {
-//   SafeAreaView,
-//   ScrollView,
+//   Text,
 //   StatusBar,
-//   StyleSheet,
-//   useColorScheme,
 //   View,
+//   StyleSheet,
+//   Platform,
+//   TouchableOpacity,
 //   Image,
 // } from 'react-native';
-// import { NativeModules } from 'react-native';
-//  const { AtomSdkModule } = NativeModules;
-// import {Colors} from 'react-native/Libraries/NewAppScreen';
+// import {NativeModules, ImageBackground} from 'react-native';
 
-// // import 
-
+// const {AtomSdkModule} = NativeModules;
+// // const image = { uri: "./src/assets/images/img_mapdashboard.png" };
+// const image = { uri: "https://reactjs.org/logo-og.png" };
 // const App = () => {
-//   const isDarkMode = useColorScheme() === 'dark';
-
-//   const backgroundStyle = {
-//     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-//   };
-
-//   const onClickConnectivity = () => {
-//     // console.log("onClickConnectivity")
-//     // AtomSdkModule.
-//   }
+//   useEffect(() => {
+//     // const msg = await AtomSdkModule.onVPNStateChange();
+//     AtomSdkModule.onVPNStateChange(msg => {
+//       console.log('use effect', msg);
+//     });
+//   });
 
 //   return (
-//     <SafeAreaView>
-//       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-//       <ScrollView contentInsetAdjustmentBehavior="automatic">
-//         <View style={styles.content}>
-//           <Image
-//             onPress={onClickConnectivity}
-//             style={styles.connectStyle}
-//             source={require('./assets/images/btn_listingactive.png')}
-//           />
-//         </View>
-//       </ScrollView>
-//     </SafeAreaView>
+//     // <View style={styles.container}>
+//     //   {/* <LottieView source={require('./src/assets/animations/connecting_button_popup.json')} /> */}
+//     //   <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+//     //     <StatusBar barStyle="dark-content" backgroundColor={'#e4e5ea'} />
+//     //     {/* <Text style={styles.title}>Ivacy</Text> */}
+//     //   </ImageBackground>
+//     // </View>
+//     <View style={styles.container}>
+//     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+//       <Text style={styles.text}>Inside</Text>
+//     </ImageBackground>
+//   </View>
 //   );
 // };
 
 // const styles = StyleSheet.create({
-//   connectStyle: {},
-//   content: {
+//   // container: {
+//   //   // backgroundImage: './src/assets/images/img_mapdashboard.png',
+//   //   background: 'black',
+//   //   flex: 1,
+//   //   paddingTop: 50,
+//   //   alignItems: 'center',
+//   // },
+//   image: {
+//     flex: 1,
+//     justifyContent: "center"
+//   },
+//   title: {
+//     fontSize: 60,
+//     color: '#fff',
+//     marginVertical: 25,
+//   },
+//   iconsContainer: {
+//     flexDirection: 'row',
 //     alignItems: 'center',
-//     display: 'flex',
-//     justifyContent: 'center',
-//     height: 600,
+//     justifyContent: 'space-evenly',
+//     width: '100%',
+//     paddingHorizontal: 50,
+//   },
+//   warningText: {
+//     color: 'red',
+//     fontWeight: 'bold',
+//     letterSpacing: 1.5,
+//     textAlign: 'center',
+//   },
+//   spacing: {
+//     marginVertical: 10,
+//   },
+//   row: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//     width: '40%',
+//   },
+//   icon: {
+//     height: 40,
+//     width: 40,
+//     marginBottom: 15,
 //   },
 // });
 
 // export default App;
 
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+  NativeModules,
+  Button,
+  TouchableWithoutFeedback,
+  DeviceEventEmitter,
+} from 'react-native';
+import LottieView from 'lottie-react-native';
 
+//Animations
+import ConnectingPopup from './src/assets/animations/connecting_button_popup.json';
+import ConnectingIn from './src/assets/animations/connecting_inn.json';
+import Connected from './src/assets/animations/connected_pulse.json';
+import ConnectedLoop from './src/assets/animations/connecting_loop.json';
 
-
-
-
-
-
-import React, {useEffect, useState} from 'react';
-import { Text, StatusBar, View, StyleSheet,
- Platform, TouchableOpacity, Image } from 'react-native';
-import { NativeModules } from 'react-native';
- const { VoiceChangingModule } = NativeModules;
-// const { FileWriteModule } = NativeModules;
-
+const {AtomSdkModule} = NativeModules;
 
 const App = () => {
-  
-  const audioTrackURL = 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3';
+  //Animation ref
+  const animation = useRef(null);
 
-  const changeToAlein = () => {
-    console.log(VoiceChangingModule)
-//      Platform.OS === 'android' && FileWriteModule.FileWriteFunc("billa")
-    // Platform.OS === 'android' && VoiceChangingModule.changeVoiceToAlien(audioTrackURL)
+  //component states
+  const [aniamtionUri, setAnimationUri] = useState(ConnectingPopup);
+  const [isConnected, setConnected] = useState(false);
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('onConnected', event => {
+      setAnimationUri(Connected);
+      setConnected(true);
+      console.log('event -->', event);
+    });
+
+    DeviceEventEmitter.addListener('onDisconnected', event => {
+      setConnected(false);
+      console.log('event -->', event);
+    });
+
+    DeviceEventEmitter.addListener('onStateChange', event => {
+      console.log('event -->', event);
+    });
+
+    DeviceEventEmitter.addListener('onConnecting', event => {
+      setAnimationUri(ConnectedLoop);
+      console.log('event -->', event);
+    });
+
+    AtomSdkModule.atomInitialize(isAtomInitialized => {
+      console.log('use effect atomInitialize', isAtomInitialized);
+    });
+  }, []);
+
+  const onResume = () => {};
+  const onPause = () => {};
+  const onPress = () => {
+    if (!isConnected) {
+      setAnimationUri(ConnectingIn);
+
+      AtomSdkModule.connectVPN(state => {
+        console.log('state', state);
+      });
+    } else {
+      AtomSdkModule.disconnectVPN();
+      setAnimationUri(ConnectingPopup);
+      console.log("disconeect call")
+    }
   };
 
-  const changeToChild = () => {
-    Platform.OS === 'android' && VoiceChangingModule.changeVoiceToChild(audioTrackURL);
-  };
 
-  const changeToFast = () => {
-    Platform.OS === 'android' && VoiceChangingModule.speedUpVoice(audioTrackURL);
-  };
-
-  const changeToSlow = () => {
-    Platform.OS === 'android' && VoiceChangingModule.slowDownVoice(audioTrackURL);
-  };
+  console.log("aniamtionUri", aniamtionUri)
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={'#e4e5ea'} />
-      <Text style={styles.title}>Voice Changer</Text>
-      <Text style={styles.title}> Change Voice Effects </Text>
-      <View style={styles.iconsContainer}>
-        <TouchableOpacity onPress={() => changeToAlein()}>
-          <Image
-            source={{
-              uri:
-                'https://icons.iconarchive.com/icons/google/noto-emoji-smileys/256/10101-alien-icon.png',
-            }}
-            resizeMode={'contain'}
-            style={styles.icon}
-          />
-          <Text>Alien</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => changeToChild()}>
-          <Image
-            source={{
-              uri:
-                'https://pics.freeicons.io/uploads/icons/png/2793494581535699799-512.png',
-            }}
-            resizeMode={'contain'}
-            style={styles.icon}
-          />
-          <Text>Child</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => changeToFast()}>
-          <Image
-            source={{
-              uri:
-                'https://www.pngjoy.com/pngl/346/6457386_black-arrows-fast-forward-symbol-transparent-png-download.png',
-            }}
-            resizeMode={'contain'}
-            style={styles.icon}
-          />
-          <Text>Fast</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => changeToSlow()}>
-          <Image
-            source={{
-              uri:
-                'https://img.pngio.com/action-motion-play-slow-icon-slow-motion-png-512_512.png',
-            }}
-            resizeMode={'contain'}
-            style={styles.icon}
-          />
-          <Text>Slow</Text>
-        </TouchableOpacity>
-      </View>
+      <ImageBackground
+        source={require('./src/assets/images/img_mapdashboard.png')}
+        resizeMode="cover"
+        style={styles.image}>
+        <Text style={styles.mainHeading}>Secure Connection</Text>
+        <TouchableWithoutFeedback onPress={onPress}>
+          {aniamtionUri ? (
+            <LottieView
+              autoPlay
+              loop={false}
+              ref={animation}
+              source={aniamtionUri}
+              resume={onResume}
+              pause={onPause}
+            />
+          ) : null}
+        </TouchableWithoutFeedback>
+      </ImageBackground>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#e4e5ea',
     flex: 1,
-    paddingTop: 50,
-    alignItems: 'center',
   },
-  title: {
-    fontSize: 20,
-    color: '#000',
-    marginVertical: 25,
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#242461',
   },
-  iconsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    width: '100%',
-    paddingHorizontal: 50,
-  },
-  warningText: {
-    color: 'red',
+  mainHeading: {
+    color: 'white',
+    fontSize: 30,
+    lineHeight: 84,
     fontWeight: 'bold',
-    letterSpacing: 1.5,
     textAlign: 'center',
-  },
-  spacing: {
-    marginVertical: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '40%',
-  },
-  icon: {
-    height: 40,
-    width: 40,
-    marginBottom: 15,
+    marginBottom: 400,
   },
 });
 
