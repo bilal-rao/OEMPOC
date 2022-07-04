@@ -123,10 +123,8 @@ public class AtomSdkModule extends ReactContextBaseJavaModule implements VPNStat
                 .emit(eventName, map);
     }
 
-    @Override
-    public void onConnected() {
-        invokeEvent("onConnected", null);
-    }
+   @Override
+   public void onConnected() {   }
 
     @Override
     public void onConnected(ConnectionDetails connectionDetails) {

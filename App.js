@@ -6,7 +6,7 @@ import {
   View,
   NativeModules,
   TouchableWithoutFeedback,
-  DeviceEventEmitter,
+  NativeEventEmitter,
 } from 'react-native';
 import LottieView from 'lottie-react-native';
 
@@ -17,6 +17,8 @@ import Connected from './src/assets/animations/connected_pulse.json';
 import ConnectedLoop from './src/assets/animations/connecting_loop.json';
 
 const {AtomSdkModule} = NativeModules;
+const DeviceEventEmitter = new NativeEventEmitter(AtomSdkModule);
+
 
 const App = () => {
   //Animation ref
@@ -34,23 +36,23 @@ const App = () => {
       setLoading(false);
       setConnected(true);
 
-      console.log('event -->', event);
+      console.log('event Connected -->', event);
     });
 
     DeviceEventEmitter.addListener('onDisconnected', event => {
       setConnected(false);
       setLoading(false);
-      console.log('event -->', event);
+      console.log('event onDisconnected -->', event);
     });
 
     DeviceEventEmitter.addListener('onStateChange', event => {
-      console.log('event -->', event);
+      console.log('event onStateChange  -->', event);
     });
 
     DeviceEventEmitter.addListener('onConnecting', event => {
       setAnimationUri(ConnectedLoop);
       setLoading(true);
-      console.log('event -->', event);
+      console.log('event onConnecting -->', event);
     });
 
     AtomSdkModule.atomInitialize(isAtomInitialized => {
@@ -77,7 +79,7 @@ const App = () => {
   };
 
 
-  console.log("aniamtionUri", aniamtionUri)
+  // console.log("aniamtionUri", aniamtionUri)
 
   return (
     <View style={styles.container}>
