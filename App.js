@@ -7,6 +7,7 @@ import {
   NativeModules,
   TouchableWithoutFeedback,
   NativeEventEmitter,
+  AsyncStorage,
 } from 'react-native';
 import LottieView from 'lottie-react-native';
 
@@ -17,8 +18,7 @@ import Connected from './src/assets/animations/connected_pulse.json';
 import ConnectedLoop from './src/assets/animations/connecting_loop.json';
 
 const {AtomSdkModule} = NativeModules;
-const DeviceEventEmitter = new NativeEventEmitter(AtomSdkModule);
-
+const DeviceEventEmitter = new NativeEventEmitter();
 
 const App = () => {
   //Animation ref
@@ -28,7 +28,7 @@ const App = () => {
   const [aniamtionUri, setAnimationUri] = useState(ConnectingPopup);
   const [isConnected, setConnected] = useState(false);
   const [isLoading, setLoading] = useState(false);
-
+  const [connectionDetails, setConnectionDetails] = useState(false);
 
   useEffect(() => {
     DeviceEventEmitter.addListener('onConnected', event => {
@@ -36,29 +36,58 @@ const App = () => {
       setLoading(false);
       setConnected(true);
 
-      console.log('event Connected -->', event);
+      saveData('connectionDetails', JSON.stringify(event.data));
+      setConnectionDetails(JSON.parse(event.data).connectionDetails);
     });
 
     DeviceEventEmitter.addListener('onDisconnected', event => {
       setConnected(false);
       setLoading(false);
-      console.log('event onDisconnected -->', event);
+      // console.log('event onDisconnected -->', event);
     });
 
     DeviceEventEmitter.addListener('onStateChange', event => {
-      console.log('event onStateChange  -->', event);
+      // console.log('event onStateChange  -->', event);
+    });
+
+    DeviceEventEmitter.addListener('onUnableToAccessInternet', event => {
+      // console.log('event onUnableToAccessInternet  -->', event);
     });
 
     DeviceEventEmitter.addListener('onConnecting', event => {
       setAnimationUri(ConnectedLoop);
       setLoading(true);
-      console.log('event onConnecting -->', event);
+      // console.log('event onConnecting -->', event);
     });
 
+    //Atom Sdk Initialization
     AtomSdkModule.atomInitialize(isAtomInitialized => {
-      console.log('use effect atomInitialize', isAtomInitialized);
+      // console.log('use effect atomInitialize', isAtomInitialized);
     });
-    
+  });
+
+  useEffect(() => {
+    // console.log(isConnected, connectionDetails);
+
+    readData('connectionDetails', value => {
+      let data = JSON.parse(value);
+      console.log(
+        'JSON.parse(data)?.connectionDetails',
+        JSON.parse(data)?.connectionDetails,
+      );
+      setConnectionDetails(JSON.parse(data)?.connectionDetails);
+    }),
+      //Get Current Status of VPN
+      AtomSdkModule.getCurrentVpnStatus(currentStatus => {
+        // console.log('currentStatus', currentStatus);
+        if (currentStatus == 'CONNECTED') {
+          setConnected(true);
+          setAnimationUri(Connected);
+          // console.log(" AsyncStorage.getItem('connectionDetails')",  AsyncStorage.getItem('connectionDetails'))
+        } else {
+          setConnected(false);
+        }
+      });
   }, []);
 
   const onResume = () => {};
@@ -69,17 +98,33 @@ const App = () => {
       setAnimationUri(ConnectingIn);
 
       AtomSdkModule.connectVPN(state => {
-        console.log('state', state);
+        // console.log('state', state);
       });
     } else {
       AtomSdkModule.disconnectVPN();
       setAnimationUri(ConnectingPopup);
-      console.log("disconeect call")
+      // console.log('disconeect call');
+    }
+  };
+  const saveData = async (key, value) => {
+    try {
+      await AsyncStorage.setItem(key, value);
+      // alert('Data successfully saved');
+    } catch (e) {
+      // alert('Failed to save the data to the storage');
     }
   };
 
-
-  // console.log("aniamtionUri", aniamtionUri)
+  const readData = async (key, callback) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value) {
+        callback(value);
+      }
+    } catch (e) {
+      alert('Failed to fetch the input from storage', e);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -87,19 +132,37 @@ const App = () => {
         source={require('./src/assets/images/img_mapdashboard.png')}
         resizeMode="cover"
         style={styles.image}>
-        <Text style={styles.mainHeading}>Secure Connection</Text>
-        <TouchableWithoutFeedback onPress={onPress}>
-          {aniamtionUri ? (
-            <LottieView
-              autoPlay
-              loop={(isLoading || isConnected )&& true}
-              ref={animation}
-              source={aniamtionUri}
-              resume={onResume}
-              pause={onPause}
-            />
-          ) : null}
-        </TouchableWithoutFeedback>
+        <View stlye={styles.content}>
+          <View style={styles.headingView}>
+            <Text style={styles.mainHeading}>
+              Secure Connection {isConnected ? 'Enabled' : 'Disabled'}
+            </Text>
+
+            <View>
+              <Text style={styles.subHeading}>
+                {isConnected ? `Your Location` : 'Tap to Connect'}{' '}
+              </Text>
+              {isConnected && (
+                <Text style={styles.subHeading}>
+                  {connectionDetails.country}
+                </Text>
+              )}
+            </View>
+          </View>
+          <TouchableWithoutFeedback onPress={onPress}>
+            {aniamtionUri ? (
+              <LottieView
+                style={styles.lottie}
+                autoPlay
+                loop={(isLoading || isConnected) && true}
+                ref={animation}
+                source={aniamtionUri}
+                resume={onResume}
+                pause={onPause}
+              />
+            ) : null}
+          </TouchableWithoutFeedback>
+        </View>
       </ImageBackground>
     </View>
   );
@@ -114,13 +177,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#242461',
   },
+  headingView: {},
   mainHeading: {
-    color: 'white',
-    fontSize: 30,
-    lineHeight: 84,
-    fontWeight: 'bold',
+    color: '#DAA520',
     textAlign: 'center',
-    marginBottom: 400,
+    fontSize: 25,
+    paddingBottom: 10,
+  },
+  subHeading: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 15,
+  },
+  lottie: {
+    width: '100%',
+  },
+  content: {
+    flex: 1,
+    width: 90,
+    borderWidth: 'thick',
+    borderColor: '#f0f',
   },
 });
 

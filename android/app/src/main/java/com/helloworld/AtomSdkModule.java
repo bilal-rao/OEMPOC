@@ -85,13 +85,21 @@ public class AtomSdkModule extends ReactContextBaseJavaModule implements VPNStat
                 });
             }
         });
+
+    }
+
+
+
+    @ReactMethod
+    public void getCurrentVpnStatus(Callback callback) {
+        callback.invoke(AtomManager.getInstance().getCurrentVpnStatus(reactContext));
     }
 
     @ReactMethod
     public void connectVPN(Callback callback) {
         try {
             callback.invoke("Connection Starting");
-            VPNProperties.Builder vpnPropertiesBuilder = new VPNProperties.Builder(countries.get(0), protocols.get(0));
+            VPNProperties.Builder vpnPropertiesBuilder = new VPNProperties.Builder(countries.get(1), protocols.get(0));
             MainApplication.atomManager.setVPNCredentials(new VPNCredentials("basit@gaditek.com", "Qwertyuiop"));
             MainApplication.atomManager.connect(reactContext, vpnPropertiesBuilder.build());
         } catch (Exception ex) {
@@ -194,7 +202,7 @@ public class AtomSdkModule extends ReactContextBaseJavaModule implements VPNStat
     public void onUnableToAccessInternet(AtomException e, ConnectionDetails connectionDetails) {
         Map<String, Object> payload = new HashMap<String, Object>();
         payload.put("e", e);
-        payload.put("connectionDetails", connectionDetails);
+        payload.put("onUnableToAccessInternet", connectionDetails);
 
         invokeEvent("onUnableToAccessInternet", payload);
     }

@@ -263,6 +263,10 @@ android {
 
 dependencies {
 
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+
+    implementation 'com.android.support:design:25.4.0'
+
     implementation 'org.bitbucket.purevpn:purevpn-sdk-android:4.0.2'
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
