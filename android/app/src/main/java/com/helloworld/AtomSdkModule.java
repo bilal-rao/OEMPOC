@@ -1,4 +1,4 @@
-package com.helloworld;
+package com.oempoc;
 
 import android.util.Log;
 

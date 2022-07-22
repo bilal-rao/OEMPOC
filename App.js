@@ -71,10 +71,6 @@ const App = () => {
 
     readData('connectionDetails', value => {
       let data = JSON.parse(value);
-      console.log(
-        'JSON.parse(data)?.connectionDetails',
-        JSON.parse(data)?.connectionDetails,
-      );
       setConnectionDetails(JSON.parse(data)?.connectionDetails);
     }),
       //Get Current Status of VPN

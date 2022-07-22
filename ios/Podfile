@@ -4,7 +4,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '11.0'
 install! 'cocoapods', :deterministic_uuids => false
 
-target 'helloworld' do
+target 'oempoc' do
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -19,7 +19,7 @@ target 'helloworld' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'helloworldTests' do
+  target 'oempocTests' do
     inherit! :complete
     # Pods for testing
   end
