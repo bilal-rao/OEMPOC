@@ -42,6 +42,10 @@ const App = () => {
       setConnectionDetails(JSON.parse(event.data).connectionDetails);
     });
 
+    DeviceEventEmitter.addListener('onDialError', event => {
+      // console.log('event onDialError  -->', event);
+    });
+
     DeviceEventEmitter.addListener('onDisconnected', event => {
       setConnected(false);
       setLoading(false);
