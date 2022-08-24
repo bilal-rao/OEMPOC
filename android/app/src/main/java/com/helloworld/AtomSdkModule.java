@@ -6,12 +6,14 @@ import com.atom.core.exceptions.AtomException;
 import com.atom.core.models.AtomConfiguration;
 import com.atom.core.models.Country;
 import com.atom.core.models.Protocol;
+
 import com.atom.sdk.android.AtomManager;
 import com.atom.sdk.android.ConnectionDetails;
 import com.atom.sdk.android.VPNCredentials;
 import com.atom.sdk.android.VPNProperties;
 import com.atom.sdk.android.VPNStateListener;
 import com.atom.sdk.android.data.callbacks.CollectionCallback;
+
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;

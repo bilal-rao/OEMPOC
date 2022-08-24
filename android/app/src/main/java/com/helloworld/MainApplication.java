@@ -6,11 +6,18 @@ import android.content.Context;
 import com.atom.core.exceptions.AtomException;
 import com.atom.core.models.Country;
 import com.atom.core.models.Protocol;
+import com.atom.core.exceptions.AtomValidationException;
+import com.atom.core.models.AtomConfiguration;
+import com.atom.core.models.AtomNotification;
+
 import com.atom.sdk.android.ConnectionDetails;
 import com.atom.sdk.android.VPNCredentials;
 import com.atom.sdk.android.VPNProperties;
 import com.atom.sdk.android.VPNStateListener;
 import com.atom.sdk.android.data.callbacks.CollectionCallback;
+import com.atom.sdk.android.AtomManager;
+
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -26,13 +33,6 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.widget.Toast;
-
-
-
-import com.atom.core.exceptions.AtomValidationException;
-import com.atom.core.models.AtomConfiguration;
-import com.atom.core.models.AtomNotification;
-import com.atom.sdk.android.AtomManager;
 import android.util.Log;
 
 import java.io.Console;
